@@ -1,13 +1,13 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <cstdlib> ")
-
+#include <cstdlib>
 using namespace std;
 
 void header(string txt);
 int choices(string txt1, string txt2);
 int firstscreen(string txt);
+
 
 int main(){
     int option = 0, stu_max = 0, quiz_max = 0;
@@ -16,16 +16,23 @@ int main(){
     option = choices("Start Recording", "Exit");
 
     if(option == 1){
+        option = 0;
         system("clear");
         header("GETTING INFO");
         stu_max = firstscreen("How many Students should be recorded? :");
         quiz_max = firstscreen("What's the total score of the activity? :");
+        //Array
+        int grades[stu_max][quiz_max] = {0};
+        cout << "Total number of Student: " << stu_max;
+        cout << "Quiz Score Minimum: " << quiz_max;
+        
+        cout << "Is this correct?(1 for Yes | 2 for no): ";
+            cin >> option;
     }else{
         return 0;
     }
 
-    cout << "Student "<< stu_max << endl;
-    cout << "Quiz "<< quiz_max << endl;
+
 
     return 0;
 }
@@ -60,8 +67,10 @@ int choices(string txt1, string txt2){
 int firstscreen(string txt){
     int maxcount = 0;
 
-    cout << txt;
+    cout << setw(5) << txt;
     cin >> maxcount;
 
     return maxcount;
 }
+
+
