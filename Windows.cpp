@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <cstdlib>
 using namespace std;
 
 // Function declarations
@@ -22,7 +21,7 @@ int main(){
 
     if(option == 1){
         option = 0;
-        system("clear");
+        system("CLS");
         header("GETTING INFO");
         stu_max = firstscreen("How many Students should be recorded? :");
         quiz_max = firstscreen("What's the total score of the activity? :");
@@ -41,7 +40,7 @@ int main(){
             inputStudentData(grades, names, stu_max, quiz_max);
             displayGrades(grades, names, stu_max, quiz_max);
         }else{
-            system("clear");
+            system("CLS");
             header("GRADE ENCODING");
             option = choices("Start Recording", "Exit");
         }
@@ -70,7 +69,7 @@ int choices(string txt1, string txt2){
         cin >> picked;
 
         if (picked != 1 && picked != 2) {
-            system("clear");
+            system("CLS");
             header("GRADE ENCODING");
         }
 
@@ -90,7 +89,7 @@ int firstscreen(string txt){
 
 void inputStudentData(int grades[][100], string names[], int stu_max, int quiz_max){
     for(int i = 0; i < stu_max; i++){
-        system("clear");
+        system("CLS");
         header("STUDENT " + to_string(i + 1));
 
         cout << "Family Name: ";
@@ -186,7 +185,7 @@ void insertionSort(string names[], int grades[][100], int stu_max){
 
 // Function to dsply grde w sort and remarks
 void displayGrades(int grades[][100], string names[], int stu_max, int quiz_max){
-    system("clear");
+    system("CLS");
     header("GRADE SUMMARY");
 
     // Find highest score BEFORE sorting
