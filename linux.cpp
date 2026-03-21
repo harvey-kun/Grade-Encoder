@@ -1,54 +1,61 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <cstdlib>
+#include <stdlib.h>
 using namespace std;
 
-// Function declarations
+//Global variables
+
+const int MAX_BUSINESSES = 10;
+const int MAX_INGREDIENTS = 20;
+
+int totalBusinesses = 0;
+
+//Global arrays
+string productNames[MAX_BUSINESSES];
+string businessNames[MAX_BUSINESSES][MAX_INGREDIENTS];
+double businessUnitCost[MAX_BUSINESSES][MAX_INGREDIENTS];
+double businessQuantity[MAX_BUSINESSES][MAX_INGREDIENTS];
+double businessYield[MAX_BUSINESSES];
+int businessIngredientCount[MAX_BUSINESSES];
+
+
+
+// Template functions
+template <typename T>
+T calcTotalCost(T costs[], int size) {
+    T total = 0.0;
+    for (int i = 0; i < size; i++) {
+        total += costs[i];
+    }
+    return total;
+}
+
+template <typename T>
+T calcCostPerUnit(T totalCost, T yield) {
+    return totalCost / yield;
+}
+
+template <typename T>
+T calcSellingPrice(T costPerUnit, T profitPercent) {
+    return costPerUnit / (1.0 - (profitPercent / 100.0));
+}
+
+template <typename T>
+T calcProfit(T revenue, T totalCost) {
+    return revenue - totalCost;
+}
+
+// Function prototypes
 void header(string txt);
-int choices(string txt1, string txt2);
-int firstscreen(string txt);
-void inputStudentData(int grades[][100], string names[], int stu_max, int quiz_max);
-void displayGrades(int grades[][100], string names[], int stu_max, int quiz_max);
-void insertionSort(string names[], int grades[][100], int stu_max);
-int findHighestScore(int grades[][100], int stu_max);
-int findHighestScoreIndex(int grades[][100], int stu_max);
+void m(int margin);
+int menu1();
+int menu2();
+int option(string option1,string option2);
+int option(string option1,string option2, string option3);
 
 int main(){
-    int option = 0, stu_max = 0, quiz_max = 0;
-
-    header("GRADE ENCODING");
-    option = choices("Start Recording", "Exit");
-
-    if(option == 1){
-        option = 0;
-        system("clear");
-        header("GETTING INFO");
-        stu_max = firstscreen("How many Students should be recorded? :");
-        quiz_max = firstscreen("What's the total score of the activity? :");
-
-        // 2D Array Declaration - Fixed second dimension of 100
-        int grades[stu_max][100];
-        string names[stu_max];
-
-        cout << "Total number of Student: " << stu_max << endl;
-        cout << "Quiz Total Score: " << quiz_max << endl;
-
-        cout << "Is this correct?(1 for Yes | 2 for no): ";
-        cin >> option;
-
-        if(option == 1){
-            inputStudentData(grades, names, stu_max, quiz_max);
-            displayGrades(grades, names, stu_max, quiz_max);
-        }else{
-            system("clear");
-            header("GRADE ENCODING");
-            option = choices("Start Recording", "Exit");
-        }
-    }else{
-        return 0;
-    }
-
+    menu1();
     return 0;
 }
 
@@ -58,168 +65,178 @@ void header(string txt){
     cout << "======================================================" << endl;
 }
 
-int choices(string txt1, string txt2){
-    int picked;
-
-    do {
-        cout << endl << endl;
-        cout << setw(20) << "[1] " << txt1 << endl;
-        cout << setw(20) << "[2] " << txt2 << endl;
-        cout << endl << endl << endl;
-        cout << "Enter your choice: ";
-        cin >> picked;
-
-        if (picked != 1 && picked != 2) {
-            system("clear");
-            header("GRADE ENCODING");
-        }
-
-    } while (picked != 1 && picked != 2);
-
-    return picked;
+int option(string option1,string option2){
+    int x;
+    cout << setw(20) << "[1] " << option1 << endl;
+    cout << setw(20) << "[2] " << option2 << endl;
+    m(1);
+    cout << "Your Input: ";
+        cin >> x;
+    return x;
 }
 
-int firstscreen(string txt){
-    int maxcount = 0;
-
-    cout << setw(5) << txt;
-    cin >> maxcount;
-
-    return maxcount;
+int option(string option1,string option2, string option3){
+    int x;
+    cout << setw(20) << "[1] " << option1 << endl;
+    cout << setw(20) << "[2] " << option2 << endl;
+    cout << setw(20) << "[3] " << option3 << endl;
+    m(1);
+    cout << "Your Input: ";
+        cin >> x;
+    return x;
 }
 
-void inputStudentData(int grades[][100], string names[], int stu_max, int quiz_max){
-    for(int i = 0; i < stu_max; i++){
-        system("clear");
-        header("STUDENT " + to_string(i + 1));
-
-        cout << "Family Name: ";
-        cin >> names[i];
-
-        cout << "First Name: ";
-        string firstName;
-        cin >> firstName;
-        names[i] += " " + firstName;
-
-        cin.ignore();
-
-        cout << "Middle Initial (optional, press Enter to skip): ";
-        string initial;
-        getline(cin, initial);
-        if(initial != ""){
-            names[i] += " " + initial;
-        }
-
-        cout << "Quiz Score: ";
-        cin >> grades[i][0];
-
-        cout << endl << endl;
-        cout << setw(20) << "[1] " << "Continue to Next Student" << endl;
-        cout << setw(20) << "[2] " << "Re-input Current Student" << endl;
-        cout << setw(20) << "[3] " << "Exit the program" << endl;
-        cout << endl << endl << endl;
-
-        int choice;
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        if(choice == 3){
-            exit(0);
-        }
-        else if(choice == 2){
-            i--;
-        }
+void m(int margin){
+    for(int x = 0 ; x < margin; x++){
+        cout << endl;
     }
 }
 
-// Function to find highest score using sequential search
-int findHighestScore(int grades[][100], int stu_max){
-    int highest = grades[0][0];
-    for(int i = 1; i < stu_max; i++){
-        if(grades[i][0] > highest){
-            highest = grades[i][0];
+int menu1(){
+    int x;
+        // Loop until user chooses to end
+    while(true) {
+        system("cls||clear");
+        header("Selling Price Calculator");
+        m(1);
+        x = option("Start Inputting Data","End Program");
+
+        if(x == 1){
+            menu2();
+        } else {
+            // End program
+            break;
         }
     }
-    return highest;
+
+    return 0;
 }
 
-// Function to find index of highest score
-int findHighestScoreIndex(int grades[][100], int stu_max){
-    int highestIndex = 0;
-    for(int i = 1; i < stu_max; i++){
-        if(grades[i][0] > grades[highestIndex][0]){
-            highestIndex = i;
-        }
-    }
-    return highestIndex;
-}
+int menu2(){
+    int choice;
 
-//Function to sort by family name using insertion sort
-void insertionSort(string names[], int grades[][100], int stu_max){
-    for(int i = 1; i < stu_max; i++){
-        string keyName = names[i];
-        int keyScore = grades[i][0];
-        int j = i - 1;
+    system("cls||clear");
+    header("Selling Price Calculator");
+    m(1);
 
-        //Extract first letter of family name for comparison
-        //Get first character
-        char keyFamily = keyName[0];
+    choice = option("New Business","Existing Business","Back");
 
-        while(j >= 0){
-            string currentName = names[j];
-            //Get first character
-            char currentFamily = currentName[0];
+    if(choice == 1){  // NEW BUSINESS
+        if(totalBusinesses < MAX_BUSINESSES){
+            system("cls||clear");
+            header("Selling Price Calculator");
 
-            if(currentFamily > keyFamily){
-                names[j + 1] = names[j];
-                grades[j + 1][0] = grades[j][0];
-                j = j - 1;
+            string productName;
+            cout << "Product name: ";
+                cin.ignore();
+                getline(cin, productName);
+            productNames[totalBusinesses] = productName;
+
+            int numIngredients;
+            cout << "Number of ingredients: ";
+                cin >> numIngredients;
+
+            if(numIngredients <= MAX_INGREDIENTS){
+                for(int i = 0; i < numIngredients; i++){
+                    cout << "\nIngredient " << i+1 << ":" << endl;
+                    cout << "Name: ";
+                        cin.ignore();
+                    getline(cin, businessNames[totalBusinesses][i]);
+                    cout << "Cost per unit (PHP): ";
+                        cin >> businessUnitCost[totalBusinesses][i];
+                    cout << "Quantity used: ";
+                        cin >> businessQuantity[totalBusinesses][i];
+                }
+
+                businessIngredientCount[totalBusinesses] = numIngredients;
+                cout << "\nProduction yield (how many products made): ";
+                    cin >> businessYield[totalBusinesses];
+
+                double ingredientCosts[MAX_INGREDIENTS];
+                for(int i = 0; i < numIngredients; i++){
+                    ingredientCosts[i] = businessUnitCost[totalBusinesses][i] * businessQuantity[totalBusinesses][i];
+                }
+
+                double totalCost = calcTotalCost(ingredientCosts, numIngredients);
+                double costPerUnit = calcCostPerUnit(totalCost, businessYield[totalBusinesses]);
+
+                double profitPercent;
+                cout << "Desired profit (%): ";
+                    cin >> profitPercent;
+                double sellingPrice = calcSellingPrice(costPerUnit, profitPercent);
+
+                cout << "\n=== RESULTS ===" << endl;
+                cout << "Product: " << productName << endl;
+                cout << "Total ingredient cost: PHP " << fixed << setprecision(2) << totalCost << endl;
+                cout << "Yield: " << businessYield[totalBusinesses] << " units" << endl;
+                cout << "Cost per unit: PHP " << fixed << setprecision(2) << costPerUnit << endl;
+                cout << "Selling price per unit: PHP " << fixed << setprecision(2) << sellingPrice << endl;
+                totalBusinesses++;
+                cout << "\nBusiness saved!" << endl;
             }
-            else{
-                break;
+        } else {
+            cout << "\nMaximum businesses reached!" << endl;
+        }
+
+    } else if(choice == 2){  // EXISTING BUSINESS
+        if(totalBusinesses == 0){
+            cout << "\nNo businesses saved!" << endl;
+        } else {
+            system("cls||clear");
+            header("Saved Businesses");
+            cout << "\nSaved Businesses:" << endl;
+            for(int i = 0; i < totalBusinesses; i++){
+                cout << "[" << i+1 << "] " << productNames[i] << endl;
+            }
+
+            int busChoice;
+            cout << "\nSelect: ";
+                cin >> busChoice;
+
+            if(busChoice > 0 && busChoice <= totalBusinesses){
+                int busIndex = busChoice - 1;
+                int numIng = businessIngredientCount[busIndex];
+
+                double ingredientCosts[MAX_INGREDIENTS];
+                for(int i = 0; i < numIng; i++){
+                    ingredientCosts[i] = businessUnitCost[busIndex][i] * businessQuantity[busIndex][i];
+                }
+                double totalProductionCost = calcTotalCost(ingredientCosts, numIng);
+
+                double unitsSold;
+                cout << "\n=== " << productNames[busIndex] << " ===" << endl;
+                cout << "Total production cost: PHP " << fixed << setprecision(2) << totalProductionCost << endl;
+                cout << "Units sold: ";
+                    cin >> unitsSold;
+
+                //Something like a failsafe
+                double costPerUnit = (businessYield[busIndex] > 0) ?
+                                    (totalProductionCost / businessYield[busIndex]) :
+                                    totalProductionCost;
+                double sellingPricePerUnit = costPerUnit * 1.3;
+                double revenue = sellingPricePerUnit * unitsSold;
+                double profitEarned = calcProfit(revenue, totalProductionCost);
+
+                cout << "\n=== PROFIT REPORT ===" << endl;
+                cout << "Product: " << productNames[busIndex] << endl;
+                cout << "Revenue: PHP " << fixed << setprecision(2) << revenue << endl;
+                if(profitEarned >= 0){
+                    cout << "Profit: PHP " << fixed << setprecision(2) << profitEarned << endl;
+                } else {
+                    cout << "Loss: PHP " << fixed << setprecision(2) << (-profitEarned) << endl;
+                }
             }
         }
-        names[j + 1] = keyName;
-        grades[j + 1][0] = keyScore;
+
+    } else if(choice == 3){
+    //back
+        return 0;
     }
-}
 
-// Function to dsply grde w sort and remarks
-void displayGrades(int grades[][100], string names[], int stu_max, int quiz_max){
-    system("clear");
-    header("GRADE SUMMARY");
-
-    // Find highest score BEFORE sorting
-    int highestScore = findHighestScore(grades, stu_max);
-    int highestIndex = findHighestScoreIndex(grades, stu_max);
-    string highestName = names[highestIndex];
-
-    // Calculate passing grade (50% of quiz total)
-    int passingGrade = quiz_max / 2;
-
-    // Sort by family name
-    insertionSort(names, grades, stu_max);
-
-    // Display highest score
-    cout << endl << "Student with the Highest Score: " << highestName << endl;
-    cout << "Highest Score: " << highestScore << endl;
-    cout << "Passing Grade: " << passingGrade << endl << endl;
-
-    // Display table header
-    cout << left << setw(30) << "Student name"
-         << setw(25) << "Score"
-         << setw(15) << "Remarks" << endl;
-    cout << "------------------------------------------------------------------------" << endl;
-
-    // Display each student
-    for(int i = 0; i < stu_max; i++){
-        string remarks;
-        if(grades[i][0] >= passingGrade){
-            remarks = "Pass";
-        }
-        else{
-            remarks = "Fail";
-        }
-        cout << left << setw(30) << names[i] << setw(25) << grades[i][0] << setw(15) << remarks << endl;
+    //After New/Existing, show Add another/Back
+    int nextChoice = option("Add another product", "Back");
+    if(nextChoice == 1){
+        menu2();
     }
+    return 0;
 }
